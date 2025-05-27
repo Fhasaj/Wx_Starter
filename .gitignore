@@ -16,3 +16,4 @@ build/Release/**
 # Keep The following files
 !build/Debug/*.md
 !build/Release/*.md
+!lib/*.md
