@@ -1,6 +1,7 @@
 # Ignore anything inside these folders
 lib/**
-build/**
+build/Debug/**
+build/Release/**
 
 
 # Ignore Files
@@ -8,6 +9,10 @@ build/**
 
 # But keep the folder itself
 !lib/
-!build
+!build/
+!build/Debug/
+!build/Release/
 
-
+# Keep The following files
+!build/Debug/*.md
+!build/Release/*.md

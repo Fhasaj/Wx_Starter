@@ -5,7 +5,7 @@
 ## Copyright (c) 2025 Fatlum Hasaj. All Rights Reserved.
 
 cmake_minimum_required(VERSION 3.16)
-project(MyWxApp) # CHnage Application Name here
+project(MyWxApp) # Change Application Name here
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -15,7 +15,27 @@ add_subdirectory(lib/wxWidgets)
 
 # wxWidgets setup - define components you need
 set(wxWidgets_COMPONENTS core base)
-find_package(wxWidgets REQUIRED COMPONENTS ${wxWidgets_COMPONENTS})
+# find_package(wxWidgets REQUIRED COMPONENTS ${wxWidgets_COMPONENTS})
+
+find_package(wxWidgets REQUIRED COMPONENTS
+    base      # The base wxWidgets functionality (non-GUI classes). Always required.
+    core      # GUI elements like wxFrame, wxPanel, etc.
+    adv       # Advanced controls (calendar, animation, wxDatePicker, etc.)
+    aui       # Advanced User Interface (docking panes, notebook tabs)
+    html      # HTML rendering control (wxHtmlWindow)
+    xrc       # XML-based resource system for UI (from .xrc files)
+    net       # Networking support (sockets, FTP, HTTP, etc.)
+    xml       # XML parsing support
+    richtext  # Rich text control (RTF-style editing)
+    media     # Multimedia support (sound, video)
+    webview   # Embedded web browser (uses native engines)
+    gl        # OpenGL support via wxGLCanvas
+    stc       # Styled Text Control (Scintilla-based code editor widget)
+    propgrid  # Property grid control (used for property editing UIs)
+    ribbon    # Microsoft-style ribbon UI (like in Office apps)
+    qa        # Quality Assurance unit testing library (optional)
+)
+
 
 # Include wxWidgets use file
 include(${wxWidgets_USE_FILE})
