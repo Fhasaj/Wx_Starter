@@ -2,6 +2,10 @@
 lib/**
 build/**
 
+
+# Ignore Files
+.cache
+
 # But keep the folder itself
 !lib/
 !build
