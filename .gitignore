@@ -1,0 +1,9 @@
+# Ignore anything inside these folders
+lib/**
+build/**
+
+# But keep the folder itself
+!lib/
+!build
+
+
