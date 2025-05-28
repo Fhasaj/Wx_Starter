@@ -1,59 +1,83 @@
-## Base for my wxWidgets Applications
-## Use When creating a wxWidgets application to get
-## the application to build using Cmake on all platforms
+# -----------------------------------------------------------------------------
+# Base for my wxWidgets Applications
+# Use When creating a wxWidgets application to get
+# the application to build using CMake on all platforms
+# -----------------------------------------------------------------------------
 
-## Copyright (c) 2025 Fatlum Hasaj. All Rights Reserved.
+# Copyright (c) 2025 Fatlum Hasaj. All Rights Reserved.
 
 cmake_minimum_required(VERSION 3.16)
-project(MyWxApp) # Change Application Name here
+project(MyWxApp)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Add wxWidgets subdirectory (assumes CMake-based build)
+# -----------------------------------------------------------------------------
+# Add wxWidgets (built as a subproject)
+# -----------------------------------------------------------------------------
+set(wxBUILD_SHARED OFF CACHE BOOL "Build wxWidgets as a static library")
+set(wxUSE_UNICODE ON CACHE BOOL "Enable Unicode support")
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "Disable shared libs for wxWidgets")
+set(wxBUILD_MONOLITHIC OFF CACHE BOOL "Use monolithic build OFF")
+set(wxBUILD_SAMPLES OFF CACHE BOOL "Don't build wxWidgets samples")
+set(wxBUILD_DEMOS OFF CACHE BOOL "Don't build wxWidgets demos")
+set(wxBUILD_TESTS OFF CACHE BOOL "Don't build wxWidgets tests")
+
+# Add wxWidgets subdirectory
 add_subdirectory(lib/wxWidgets)
 
-# wxWidgets setup - define components you need
-set(wxWidgets_COMPONENTS core base)
-# find_package(wxWidgets REQUIRED COMPONENTS ${wxWidgets_COMPONENTS})
-
-find_package(wxWidgets REQUIRED COMPONENTS
-    base      # The base wxWidgets functionality (non-GUI classes). Always required.
-    core      # GUI elements like wxFrame, wxPanel, etc.
-    adv       # Advanced controls (calendar, animation, wxDatePicker, etc.)
-    aui       # Advanced User Interface (docking panes, notebook tabs)
-    html      # HTML rendering control (wxHtmlWindow)
-    xrc       # XML-based resource system for UI (from .xrc files)
-    net       # Networking support (sockets, FTP, HTTP, etc.)
-    xml       # XML parsing support
-    richtext  # Rich text control (RTF-style editing)
-    media     # Multimedia support (sound, video)
-    webview   # Embedded web browser (uses native engines)
-    gl        # OpenGL support via wxGLCanvas
-    stc       # Styled Text Control (Scintilla-based code editor widget)
-    propgrid  # Property grid control (used for property editing UIs)
-    ribbon    # Microsoft-style ribbon UI (like in Office apps)
-    qa        # Quality Assurance unit testing library (optional)
-)
-
-
-# Include wxWidgets use file
-include(${wxWidgets_USE_FILE})
-
-# Include directories
+# -----------------------------------------------------------------------------
+# Include directories for your app
+# -----------------------------------------------------------------------------
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/headers
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/wxWidgets/include
     ${CMAKE_CURRENT_SOURCE_DIR}/lib/wxWidgets/lib
 )
 
-# Source files
+# -----------------------------------------------------------------------------
+# Collect source files
+# -----------------------------------------------------------------------------
 file(GLOB_RECURSE SRC_FILES src/*.cpp)
 file(GLOB_RECURSE HDR_FILES headers/*.h)
 
-# Create executable
+# -----------------------------------------------------------------------------
+# Create the executable
+# -----------------------------------------------------------------------------
 add_executable(${PROJECT_NAME} ${SRC_FILES} ${HDR_FILES})
 
-# Link wxWidgets
-target_link_libraries(${PROJECT_NAME} ${wxWidgets_LIBRARIES})
+# -----------------------------------------------------------------------------
+# Link against wxWidgets libraries
+# -----------------------------------------------------------------------------
+# Find all relevant built libraries
+set(WX_LIBS
+    wx::base
+    wx::core
+    wx::adv
+    wx::aui
+    wx::html
+    wx::xrc
+    wx::net
+    wx::xml
+    wx::richtext
+    wx::media
+    wx::webview
+    wx::gl
+    wx::stc
+    wx::propgrid
+    wx::ribbon
+    wx::qa
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE ${WX_LIBS})
+
+# -----------------------------------------------------------------------------
+# Platform-specific tweaks (if needed)
+# -----------------------------------------------------------------------------
+if(WIN32)
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+        WIN32_EXECUTABLE TRUE
+    )    
+target_compile_definitions(${PROJECT_NAME} PRIVATE _CRT_SECURE_NO_WARNINGS)
+endif()
 
